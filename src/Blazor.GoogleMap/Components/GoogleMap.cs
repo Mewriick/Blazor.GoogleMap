@@ -10,7 +10,9 @@ namespace Blazor.GoogleMap.Components
     {
         [Inject] GoogleMapInterop GoogleMapInterop { get; set; }
 
-        [Parameter] EventCallback<MouseEvent> OnClick { get; set; }
+        [Inject] IMouseEventsInovkable MouseEventsInovkable { get; set; }
+
+        [Parameter] EventCallback<MouseEventArgs> OnClick { get; set; }
 
         public GoogleMap()
         {
@@ -33,7 +35,9 @@ namespace Blazor.GoogleMap.Components
 
         protected override async Task OnInitAsync()
         {
-            await GoogleMapInterop.RegisterOnClick(OnClick);
+            MouseEventsInovkable.RegisterCallback(MouseEvent.Click, OnClick);
+
+            await GoogleMapInterop.RegisterMouseCallbacks();
             await GoogleMapInterop.InitMap(
                 new Maps.Coordinates.LatLng
                 {

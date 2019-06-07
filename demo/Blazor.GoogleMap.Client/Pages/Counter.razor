@@ -15,8 +15,8 @@
         currentCount++;
     }
 
-    void MapOnClick(MouseEvent mouseEvent)
+    void MapOnClick(MouseEventArgs mouseEvent)
     {
-        Console.WriteLine("Clicked!");
+        Console.WriteLine($"Clicked! {mouseEvent.LatLng.Lat}, {mouseEvent.LatLng.Lng}");
     }
 }

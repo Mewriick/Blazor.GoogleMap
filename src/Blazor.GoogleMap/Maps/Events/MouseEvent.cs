@@ -1,9 +1,13 @@
-﻿using Blazor.GoogleMap.Maps.Coordinates;
-
-namespace Blazor.GoogleMap.Maps.Events
+﻿namespace Blazor.GoogleMap.Maps.Events
 {
-    public class MouseEvent
+    public enum MouseEvent
     {
-        public LatLng LatLng { get; set; }
+        None = 0,
+        Click = 1,
+        DblClick = 2,
+        MouseMove = 3,
+        MouseOut = 4,
+        MouseOver = 5,
+        RightClick = 6
     }
 }
