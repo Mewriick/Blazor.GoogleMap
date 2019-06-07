@@ -9,6 +9,7 @@ window.blazorGoogleMap = {
 
     eventHandlersInvoker: {},
     map: {},
+    markers: [],
 
     initMapCallback: function () {        
         var center = { lat: this.initialState.lat, lng: this.initialState.lng };        
@@ -40,6 +41,16 @@ window.blazorGoogleMap = {
             lat: lat,
             lng: lng
         };
+    },
+
+    addMarker: function (markerRef, marker) {
+        var mapMarker = new google.maps.Marker({
+            map: this.blazorGoogleMap.map,
+            position: marker.position,
+            title: "Hello World!"
+        });
+
+        this.blazorGoogleMap.markers.push({ mapMarker: mapMarker, markerRef: markerRef });
     },
 
     registerEventInvokers: function (eventHandlersInvoker) {

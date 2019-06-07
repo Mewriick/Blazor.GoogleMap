@@ -1,14 +1,23 @@
 ﻿@page "/counter"
+@inject MarkerCollectionFactory MarkerCollectionFactory;
 
 <h1>Counter</h1>
 
 <p>Current count: @currentCount</p>
 
 <button class="btn btn-primary" onclick="@IncrementCount">Click me</button>
-<GoogleMap OnClick="@MapOnClick"></GoogleMap>
+<GoogleMap OnClick="@MapOnClick" OnDoubleClick="@MapOnDoubleClick"></GoogleMap>
 
 @functions {
     int currentCount = 0;
+    IMarkerCollection markers;
+
+    protected override void OnInit()
+    {
+        base.OnInit();
+
+        markers = MarkerCollectionFactory.Create();
+    }
 
     void IncrementCount()
     {
@@ -18,5 +27,11 @@
     void MapOnClick(MouseEventArgs mouseEvent)
     {
         Console.WriteLine($"Clicked! {mouseEvent.LatLng.Lat}, {mouseEvent.LatLng.Lng}");
+        markers.Add(new Marker(mouseEvent.LatLng));
+    }
+
+    void MapOnDoubleClick(MouseEventArgs mouseEvent)
+    {
+        Console.WriteLine($"DoubleClicked! {mouseEvent.LatLng.Lat}, {mouseEvent.LatLng.Lng}");
     }
 }

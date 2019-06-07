@@ -23,6 +23,11 @@ namespace Blazor.GoogleMap.Maps.Events
 
         public IMouseEventsInovkable RegisterCallback(MouseEvent mouseEvent, EventCallback<MouseEventArgs> eventCallback)
         {
+            if (!eventCallback.HasDelegate)
+            {
+                return this;
+            }
+
             var mouseEventName = mouseEvent.ToString().ToLower();
             if (eventCallbacks.ContainsKey(mouseEventName))
             {

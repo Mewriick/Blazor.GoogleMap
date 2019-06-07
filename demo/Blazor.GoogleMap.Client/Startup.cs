@@ -7,7 +7,10 @@ namespace Blazor.GoogleMap.Client
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddGoogleMaps();
+            services.AddGoogleMaps(options =>
+            {
+                options.ApiKey = "AIzaSyDdjy-3jYU9UvXJLoTPzSyAhMH-kkiK6h4";
+            });
         }
 
         public void Configure(IComponentsApplicationBuilder app)

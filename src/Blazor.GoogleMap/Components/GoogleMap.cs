@@ -8,11 +8,15 @@ namespace Blazor.GoogleMap.Components
     [Route("/googlemap")]
     public class GoogleMap : ComponentBase
     {
+        [Inject] GoogleMapOptions GoogleMapOptions { get; set; }
+
         [Inject] GoogleMapInterop GoogleMapInterop { get; set; }
 
         [Inject] IMouseEventsInovkable MouseEventsInovkable { get; set; }
 
         [Parameter] EventCallback<MouseEventArgs> OnClick { get; set; }
+
+        [Parameter] EventCallback<MouseEventArgs> OnDoubleClick { get; set; }
 
         public GoogleMap()
         {
@@ -20,22 +24,25 @@ namespace Blazor.GoogleMap.Components
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
-            var seq = 0;
             base.BuildRenderTree(builder);
+            var internalBuilder = new BlazorRendererTreeBuilder(builder);
 
-            builder.OpenElement(++seq, "div");
-            builder.AddAttribute(++seq, "id", "map");
-            builder.OpenElement(++seq, "script");
-            builder.AddAttribute(++seq, "async", "");
-            builder.AddAttribute(++seq, "defer", "");
-            builder.AddAttribute(++seq, "src", "https://maps.googleapis.com/maps/api/js?key=AIzaSyDdjy-3jYU9UvXJLoTPzSyAhMH-kkiK6h4&callback=blazorGoogleMap.initMapCallback");
-            builder.CloseElement();
-            builder.CloseElement();
+            internalBuilder
+                .OpenElement("div")
+                .AddAttribute("id", "map")
+                .OpenElement("script")
+                .AddAttribute("async", "")
+                .AddAttribute("defer", "")
+                .AddAttribute("src", $"https://maps.googleapis.com/maps/api/js?key={GoogleMapOptions.ApiKey}&callback=blazorGoogleMap.initMapCallback")
+                .CloseElement()
+                .CloseElement();
         }
 
         protected override async Task OnInitAsync()
         {
-            MouseEventsInovkable.RegisterCallback(MouseEvent.Click, OnClick);
+            MouseEventsInovkable
+                .RegisterCallback(MouseEvent.Click, OnClick)
+                .RegisterCallback(MouseEvent.DblClick, OnDoubleClick);
 
             await GoogleMapInterop.RegisterMouseCallbacks();
             await GoogleMapInterop.InitMap(
