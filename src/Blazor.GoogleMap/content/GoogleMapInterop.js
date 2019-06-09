@@ -47,10 +47,18 @@ window.blazorGoogleMap = {
         var mapMarker = new google.maps.Marker({
             map: this.blazorGoogleMap.map,
             position: marker.position,
-            title: "Hello World!"
-        });
+            title: marker.title
+        });        
+
+        if (merker.onClick.hasDelegate) {
+            marker.addListener('click', function () {
+                return markerRef.invokeMethodAsync('OnClickHandle');
+            });
+        }
 
         this.blazorGoogleMap.markers.push({ mapMarker: mapMarker, markerRef: markerRef });
+
+        return true;
     },
 
     registerEventInvokers: function (eventHandlersInvoker) {

@@ -1,4 +1,4 @@
-﻿namespace Blazor.GoogleMap.Maps.Coordinates
+﻿namespace Blazor.GoogleMap.Map.Coordinates
 {
     public class LatLng
     {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazor.GoogleMap.Maps.Events
+namespace Blazor.GoogleMap.Map.Events
 {
     public class MouseEventsInvoker : IMouseEventsInovkable
     {

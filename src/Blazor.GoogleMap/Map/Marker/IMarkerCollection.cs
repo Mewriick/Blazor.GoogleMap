@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Blazor.GoogleMap.Maps.Marker
+namespace Blazor.GoogleMap.Map.Marker
 {
     public interface IMarkerCollection : IEnumerable<Marker>
     {
-        Task Add(Marker marker);
+        Marker this[Guid markerId] { get; }
+
+        Task<Marker> Add(MarkerOptions markerOptions);
 
         Task Remove(Marker marker);
 

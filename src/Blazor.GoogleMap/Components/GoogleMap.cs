@@ -1,4 +1,4 @@
-﻿using Blazor.GoogleMap.Maps.Events;
+﻿using Blazor.GoogleMap.Map.Events;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.RenderTree;
 using System.Threading.Tasks;
@@ -46,7 +46,7 @@ namespace Blazor.GoogleMap.Components
 
             await GoogleMapInterop.RegisterMouseCallbacks();
             await GoogleMapInterop.InitMap(
-                new Maps.Coordinates.LatLng
+                new Map.Coordinates.LatLng
                 {
                     Lat = -30.144,
                     Lng = 145.25

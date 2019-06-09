@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
 
-namespace Blazor.GoogleMap.Maps.Events
+namespace Blazor.GoogleMap.Map.Events
 {
     public interface IMouseEventsInovkable
     {

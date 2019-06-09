@@ -1,4 +1,4 @@
-﻿namespace Blazor.GoogleMap.Maps.Events
+﻿namespace Blazor.GoogleMap.Map.Events
 {
     public enum MouseEvent
     {

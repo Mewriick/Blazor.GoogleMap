@@ -1,5 +1,5 @@
-﻿using Blazor.GoogleMap.Maps.Coordinates;
-using Blazor.GoogleMap.Maps.Events;
+﻿using Blazor.GoogleMap.Map.Coordinates;
+using Blazor.GoogleMap.Map.Events;
 using Microsoft.JSInterop;
 using System;
 using System.Threading.Tasks;

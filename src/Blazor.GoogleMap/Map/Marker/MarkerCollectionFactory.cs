@@ -1,7 +1,7 @@
 ﻿using Microsoft.JSInterop;
 using System;
 
-namespace Blazor.GoogleMap.Maps.Marker
+namespace Blazor.GoogleMap.Map.Marker
 {
     public class MarkerCollectionFactory
     {

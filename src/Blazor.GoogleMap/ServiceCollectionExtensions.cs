@@ -1,5 +1,5 @@
-﻿using Blazor.GoogleMap.Maps.Events;
-using Blazor.GoogleMap.Maps.Marker;
+﻿using Blazor.GoogleMap.Map.Events;
+using Blazor.GoogleMap.Map.Marker;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -17,7 +17,7 @@ namespace Blazor.GoogleMap
             var googleMapOptions = new GoogleMapOptions();
             configure.Invoke(googleMapOptions);
 
-            services.AddSingleton<GoogleMapOptions>();
+            services.AddSingleton(googleMapOptions);
             services.AddSingleton<GoogleMapInterop>();
             services.AddSingleton<IMouseEventsInovkable, MouseEventsInvoker>();
             services.AddSingleton<MarkerCollectionFactory>();

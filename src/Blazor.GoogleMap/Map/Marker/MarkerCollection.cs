@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Blazor.GoogleMap.Maps.Marker
+namespace Blazor.GoogleMap.Map.Marker
 {
     public class MarkerCollection : IMarkerCollection
     {
@@ -15,17 +15,23 @@ namespace Blazor.GoogleMap.Maps.Marker
 
         public bool IsReadOnly => false;
 
+        public Marker this[Guid markerId] => markers[markerId];
+
         public MarkerCollection(IJSRuntime jSRuntime)
         {
             this.jSRuntime = jSRuntime ?? throw new ArgumentNullException(nameof(jSRuntime));
             markers = new Dictionary<Guid, Marker>();
         }
 
-        public Task Add(Marker marker)
+        public async Task<Marker> Add(MarkerOptions markerOptions)
         {
-            return jSRuntime.InvokeAsync<object>(
+            var marker = new Marker(markerOptions, jSRuntime);
+
+            await jSRuntime.InvokeAsync<object>(
                 "blazorGoogleMap.addMarker",
-                new DotNetObjectRef(marker), marker);
+                new DotNetObjectRef(marker), markerOptions);
+
+            return marker;
         }
 
         public Task Remove(Marker marker)

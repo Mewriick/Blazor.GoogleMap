@@ -27,11 +27,20 @@
     void MapOnClick(MouseEventArgs mouseEvent)
     {
         Console.WriteLine($"Clicked! {mouseEvent.LatLng.Lat}, {mouseEvent.LatLng.Lng}");
-        markers.Add(new Marker(mouseEvent.LatLng));
+        markers.Add(new MarkerOptions(mouseEvent.LatLng)
+        {
+            Title = $"Test {DateTime.Now}",
+            //OnClick = EventCallbackFactory.Create<Marker>(this, MarkerClick)
+        });
     }
 
     void MapOnDoubleClick(MouseEventArgs mouseEvent)
     {
         Console.WriteLine($"DoubleClicked! {mouseEvent.LatLng.Lat}, {mouseEvent.LatLng.Lng}");
+    }
+
+    void MarkerClick(Marker marker)
+    {
+        Console.WriteLine(marker.Options.Title);
     }
 }
