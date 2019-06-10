@@ -1,26 +1,27 @@
-﻿using Microsoft.JSInterop;
+﻿using Blazor.GoogleMap.Map.Coordinates;
+using Microsoft.JSInterop;
 using System;
-using System.Threading.Tasks;
 
 namespace Blazor.GoogleMap.Map.Marker
 {
-    public class Marker : JsConnectedObject
+    public class Marker : JsConnectedObject, ILocationable
     {
-        public Guid Id { get; }
+        public Guid Id => Options.Id;
 
         public MarkerOptions Options { get; }
+
+        public LatLng Position => Options.Position;
 
         public Marker(MarkerOptions options, IJSRuntime jSRuntime)
             : base(jSRuntime)
         {
-            Id = Guid.NewGuid();
             Options = options;
         }
 
         [JSInvokable]
-        private Task OnClickHandle()
+        public void OnClickHandle()
         {
-            return Options?.OnClick.InvokeAsync(this);
+            Options.OnMarkerClick.InvokeAsync(this);
         }
     }
 }

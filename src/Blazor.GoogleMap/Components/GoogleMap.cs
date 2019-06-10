@@ -44,13 +44,18 @@ namespace Blazor.GoogleMap.Components
                 .RegisterCallback(MouseEvent.Click, OnClick)
                 .RegisterCallback(MouseEvent.DblClick, OnDoubleClick);
 
-            await GoogleMapInterop.RegisterMouseCallbacks();
+            await GoogleMapInterop.RegisterCallbacks(new Map.InitMapCallback(MapInitialized));
             await GoogleMapInterop.InitMap(
                 new Map.Coordinates.LatLng
                 {
                     Lat = -30.144,
                     Lng = 145.25
                 });
+        }
+
+        private void MapInitialized()
+        {
+
         }
     }
 }

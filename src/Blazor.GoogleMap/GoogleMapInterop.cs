@@ -1,4 +1,5 @@
-﻿using Blazor.GoogleMap.Map.Coordinates;
+﻿using Blazor.GoogleMap.Map;
+using Blazor.GoogleMap.Map.Coordinates;
 using Blazor.GoogleMap.Map.Events;
 using Microsoft.JSInterop;
 using System;
@@ -22,11 +23,17 @@ namespace Blazor.GoogleMap
             return jSRuntime.InvokeAsync<bool>("blazorGoogleMap.initMap", latLng.Lat, latLng.Lng);
         }
 
-        public Task RegisterMouseCallbacks()
+        public Task RegisterCallbacks(InitMapCallback initMapCallback)
         {
             return jSRuntime.InvokeAsync<object>(
                 "blazorGoogleMap.registerEventInvokers",
-                new DotNetObjectRef(mouseEventsInovkable));
+                new DotNetObjectRef(mouseEventsInovkable), new DotNetObjectRef(initMapCallback));
+        }
+
+        public Task CreateInfoWindow(string id, LatLng position)
+        {
+            return jSRuntime.InvokeAsync<object>(
+                "blazorGoogleMap.createInfoWindow", id, position);
         }
     }
 }
