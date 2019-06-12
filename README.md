@@ -2,7 +2,7 @@
 Blazor component for GoogleMap which allows to manipulate with GoogleMap just with C# language and no JS is required.
 
 ## IMPORTANT!
-This is very very first version and API it will increase and also documentation.
+This is very very first prewview version and API it will increase and also documentation.
 
 # Instalation
 [![NuGet Pre Release](https://img.shields.io/badge/nuget-0.0.1-preview-orange.svg)](https://www.nuget.org/packages/Blazor.GoogleMap)
@@ -23,9 +23,15 @@ public void ConfigureServices(IServiceCollection services)
 * Add OnClick, OnDoubleClick event listeners on the map and marker
 * InfoWindow
 
+# Markers
+For adding markers to the map you need **IMarkerCollection** service which is provided by method **Create** on **MarkerCollectionFactory** object.
 
-#Example
-For adding markers to the map you need **IMarkerCollection** service which is provided by **MarkerCollectionFactory**.
+# InfoWindow
+For definition of InfoWindow you can use **GoogleMapInfoWindow** component. For handling open library provide **InfoWindow** service with **Open** method.
+Method can accept **id** of **GoogleMapInfoWindow** component or whole html which you want to render.
+If you when add marker into map  fill property **AssociatedInfoWindowId**, after you click on marker the **InfoWindow** is opened.
+
+# Example
 
 ```cs
 @page "/map"
@@ -55,11 +61,6 @@ For adding markers to the map you need **IMarkerCollection** service which is pr
         base.OnInit();
 
         markers = MarkerCollectionFactory.Create();
-    }
-
-    void IncrementCount()
-    {
-        currentCount++;
     }
 
     void MapOnClick(MouseEventArgs mouseEvent)
