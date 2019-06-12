@@ -1,12 +1,8 @@
-﻿@page "/counter"
+﻿@page "/map"
 @inject MarkerCollectionFactory MarkerCollectionFactory;
 @inject InfoWindow  InfoWindow;
 
-<h1>Counter</h1>
-
-<p>Current count: @currentCount</p>
-
-<button class="btn btn-primary" onclick="@IncrementCount">Click me</button>
+<h1>Google Map</h1>
 
 <GoogleMap OnClick="@MapOnClick" OnDoubleClick="@MapOnDoubleClick"></GoogleMap>
 <GoogleMapInfoWindow Id="infoWindow">
@@ -42,6 +38,7 @@
         markers.Add(new MarkerOptions(mouseEvent.LatLng)
         {
             Title = $"Test {DateTime.Now}",
+            AssociatedInfoWindowId = "infoWindow",
             OnMarkerClick = EventCallback.Factory.Create<Marker>(this, MarkerClick)
         });
     }
@@ -55,6 +52,5 @@
     {
         selectedMarker = marker;
         Console.WriteLine(marker.Options.Title);
-        InfoWindow.Open("infoWindow", marker);
     }
 }

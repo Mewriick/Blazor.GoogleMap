@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using System;
 
-namespace Blazor.GoogleMap.Map.Marker
+namespace Blazor.GoogleMap.Map.Markers
 {
     public class MarkerOptions
     {
@@ -13,6 +13,11 @@ namespace Blazor.GoogleMap.Map.Marker
         public string Title { get; set; } = string.Empty;
 
         public EventCallback<Marker> OnMarkerClick { get; set; }
+
+        /// <summary>
+        /// Id of <see cref="InfoWindows.InfoWindow"/> component. If this property is not empty after <see cref="OnMarkerClick"/> <see cref="InfoWindows.InfoWindow"/> is opened
+        /// </summary>
+        public string AssociatedInfoWindowId { get; set; } = string.Empty;
 
         public MarkerOptions(LatLng position)
         {

@@ -2,35 +2,29 @@
 // wrapped in a .NET API
 
 window.blazorGoogleMap = {
-    initialState: {
-        lat: 0,
-        lng: 0
-    },
-
-    initDotnetCallback: {},
-    eventHandlersInvoker: {},
-    infoWindows: {},
-    map: {},
     markers: [],
 
     initMapCallback: function () {
-        var center = { lat: this.initialState.lat, lng: this.initialState.lng };
-        this.map = new google.maps.Map(
-            document.getElementById('map'), { zoom: 4, center: center });
+        var currentThis = this === window
+            ? this.blazorGoogleMap
+            : this;
 
-        if (this.eventHandlersInvoker === undefined) {
+        currentThis.map = new google.maps.Map(
+            document.getElementById('map'), currentThis.initialMapOptions);
+
+        if (currentThis.eventHandlersInvoker === undefined) {
             return false;
         }
 
-        this.initDotnetCallback.invokeMethodAsync('OnInitFinished');
-        this.eventHandlersInvoker.invokeMethodAsync('GetMouseEvents')
+        currentThis.initDotnetCallback.invokeMethodAsync('OnInitFinished');
+        currentThis.eventHandlersInvoker.invokeMethodAsync('GetMouseEvents')
             .then((events) => {
                 events.map(eventName => {
-                    this.map.addListener(eventName,
+                    currentThis.map.addListener(eventName,
                         (function (e) {
                             return this.eventHandlersInvoker
                                 .invokeMethodAsync('InvokeMouseEvent', eventName, e);
-                        }).bind(this)
+                        }).bind(currentThis)
                     );
                 });
             });
@@ -38,18 +32,15 @@ window.blazorGoogleMap = {
         return true;
     },
 
-    initMap: function (lat, lng) {
-        this.blazorGoogleMap.initialState = {
-            lat: lat,
-            lng: lng
-        };
+    initMap: function (initialMapOptions) {
+        this.blazorGoogleMap.initialMapOptions = initialMapOptions;
     },
 
     addMarker: function (markerRef, marker) {
         var mapMarker = new google.maps.Marker({
             map: this.blazorGoogleMap.map,
             position: marker.position,
-            title: marker.title,           
+            title: marker.title
         });
 
         if (marker.onClick !== null) {
@@ -64,24 +55,23 @@ window.blazorGoogleMap = {
         return true;
     },
 
-    openInfoWindow: function (id, positionableObject) {
-        if (this.blazorGoogleMap.infoWindows[id] === undefined) {
-            this.blazorGoogleMap.infoWindows[id] = new google.maps.InfoWindow();
-        }       
-
-        var content = document.getElementById(id).innerHTML;
-        var infoWindow = this.blazorGoogleMap.infoWindows[id];
-        infoWindow.setContent(content);
+    openInfoWindow: function (id, positionableObject, htmlContent) {
+        var content = htmlContent === undefined 
+            ? document.getElementById(id).innerHTML
+            : htmlContent;
         
+        this.blazorGoogleMap.infoWindow = new google.maps.InfoWindow();
+        this.blazorGoogleMap.infoWindow.setContent(content);
+
         var marker = this.blazorGoogleMap.markers.find(function (m) {
             return m.mapMarker.id === positionableObject.id;
         });
 
         if (marker !== undefined) {
-            infoWindow.open(this.blazorGoogleMap.map, marker.mapMarker);
+            this.blazorGoogleMap.infoWindow.open(this.blazorGoogleMap.map, marker.mapMarker);
         } else {
-            infoWindow.setPosition(positionableObject.position);
-            infoWindow.open(this.blazorGoogleMap.map);
+            this.blazorGoogleMap.infoWindow.setPosition(positionableObject.position);
+            this.blazorGoogleMap.infoWindow.open(this.blazorGoogleMap.map);
         }
     },
 

@@ -1,15 +1,17 @@
-﻿using Microsoft.JSInterop;
+﻿using Blazor.GoogleMap.Map.InfoWindows;
+using Microsoft.JSInterop;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Blazor.GoogleMap.Map.Marker
+namespace Blazor.GoogleMap.Map.Markers
 {
     public class MarkerCollection : IMarkerCollection
     {
         private readonly Dictionary<Guid, Marker> markers;
         private readonly IJSRuntime jSRuntime;
+        private readonly InfoWindow infoWindow;
 
         public int Count => markers.Count;
 
@@ -17,15 +19,16 @@ namespace Blazor.GoogleMap.Map.Marker
 
         public Marker this[Guid markerId] => markers[markerId];
 
-        public MarkerCollection(IJSRuntime jSRuntime)
+        public MarkerCollection(IJSRuntime jSRuntime, InfoWindow infoWindow)
         {
             this.jSRuntime = jSRuntime ?? throw new ArgumentNullException(nameof(jSRuntime));
+            this.infoWindow = infoWindow ?? throw new ArgumentNullException(nameof(infoWindow));
             markers = new Dictionary<Guid, Marker>();
         }
 
         public async Task<Marker> Add(MarkerOptions markerOptions)
         {
-            var marker = new Marker(markerOptions, jSRuntime);
+            var marker = new Marker(markerOptions, jSRuntime, infoWindow);
 
             await jSRuntime.InvokeAsync<object>(
                 "blazorGoogleMap.addMarker",

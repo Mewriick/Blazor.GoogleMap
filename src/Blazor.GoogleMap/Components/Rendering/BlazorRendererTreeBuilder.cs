@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components.RenderTree;
 using System;
 
-namespace Blazor.GoogleMap.Components
+namespace Blazor.GoogleMap.Components.Rendering
 {
     public class BlazorRendererTreeBuilder : IRendererTreeBuilder
     {

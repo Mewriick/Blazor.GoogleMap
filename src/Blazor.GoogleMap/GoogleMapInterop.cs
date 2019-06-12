@@ -18,9 +18,14 @@ namespace Blazor.GoogleMap
             this.mouseEventsInovkable = mouseEventsInovkable ?? throw new ArgumentNullException(nameof(mouseEventsInovkable));
         }
 
-        public Task<bool> InitMap(LatLng latLng)
+        public Task<bool> InitMap(InitialMapOptions initialMapOptions)
         {
-            return jSRuntime.InvokeAsync<bool>("blazorGoogleMap.initMap", latLng.Lat, latLng.Lng);
+            return jSRuntime.InvokeAsync<bool>("blazorGoogleMap.initMap", initialMapOptions);
+        }
+
+        public Task<bool> ExecuteInitMapCallback()
+        {
+            return jSRuntime.InvokeAsync<bool>("blazorGoogleMap.initMapCallback");
         }
 
         public Task RegisterCallbacks(InitMapCallback initMapCallback)

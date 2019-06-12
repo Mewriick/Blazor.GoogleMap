@@ -1,6 +1,7 @@
-﻿using Blazor.GoogleMap.Map.Events;
-using Blazor.GoogleMap.Map.InfoWindow;
-using Blazor.GoogleMap.Map.Marker;
+﻿using Blazor.GoogleMap.Components.Rendering;
+using Blazor.GoogleMap.Map.Events;
+using Blazor.GoogleMap.Map.InfoWindows;
+using Blazor.GoogleMap.Map.Markers;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -15,7 +16,7 @@ namespace Blazor.GoogleMap
                 throw new ArgumentNullException($"Configuration of {nameof(GoogleMapOptions)} is required");
             }
 
-            var googleMapOptions = new GoogleMapOptions();
+            var googleMapOptions = new GoogleMapRestrictedOptions();
             configure.Invoke(googleMapOptions);
 
             services.AddSingleton(googleMapOptions);
@@ -23,6 +24,7 @@ namespace Blazor.GoogleMap
             services.AddSingleton<InfoWindow>();
             services.AddSingleton<IMouseEventsInovkable, MouseEventsInvoker>();
             services.AddSingleton<MarkerCollectionFactory>();
+            services.AddSingleton<IRendereringStatusCache, MemoryRenderingCache>();
 
             return services;
         }

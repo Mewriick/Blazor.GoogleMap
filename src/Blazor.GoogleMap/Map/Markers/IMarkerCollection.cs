@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Blazor.GoogleMap.Map.Marker
+namespace Blazor.GoogleMap.Map.Markers
 {
     public interface IMarkerCollection : IEnumerable<Marker>
     {

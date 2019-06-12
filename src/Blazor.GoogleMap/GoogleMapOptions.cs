@@ -4,4 +4,9 @@
     {
         public string ApiKey { get; set; }
     }
+
+    internal class GoogleMapRestrictedOptions : GoogleMapOptions
+    {
+        public bool MapJsWasIncluded { get; set; }
+    }
 }
