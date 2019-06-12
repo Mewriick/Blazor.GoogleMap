@@ -5,7 +5,7 @@ Blazor component for GoogleMap which allows to manipulate with GoogleMap just wi
 This is very very first prewview version and API it will increase and also documentation.
 
 # Instalation
-[![NuGet Pre Release](https://img.shields.io/badge/nuget-0.0.1-preview-orange.svg)](https://www.nuget.org/packages/Blazor.GoogleMap)
+[![NuGet Pre Release](https://img.shields.io/badge/nuget-0.0.1-orange.svg)](https://www.nuget.org/packages/Blazor.GoogleMap)
 
 # Setup
 ```cs
