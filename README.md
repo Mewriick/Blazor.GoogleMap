@@ -29,7 +29,7 @@ For adding markers to the map you need **IMarkerCollection** service which is pr
 # InfoWindow
 For definition of InfoWindow you can use **GoogleMapInfoWindow** component. For handling open library provide **InfoWindow** service with **Open** method.
 Method can accept **id** of **GoogleMapInfoWindow** component or whole html which you want to render.
-If you when add marker into map  fill property **AssociatedInfoWindowId**, after you click on marker the **InfoWindow** is opened.
+If you add marker into map whit filled property **AssociatedInfoWindowId**, after you click on marker the **InfoWindow** is opened.
 
 # Example
 
@@ -43,11 +43,27 @@ If you when add marker into map  fill property **AssociatedInfoWindowId**, after
 <GoogleMap OnClick="@MapOnClick" OnDoubleClick="@MapOnDoubleClick"></GoogleMap>
 <GoogleMapInfoWindow Id="infoWindow">
     <div>
-        <h4>Test</h4>
+        <h4>Infowindow 1</h4>
         @if (selectedMarker != null)
         {
             <p>@selectedMarker.Id</p>
         }
+
+
+        <button onclick="@RemoveMarker">Remove marker</button>
+    </div>
+</GoogleMapInfoWindow>
+
+<GoogleMapInfoWindow Id="infoWindowSecond">
+    <div>
+        <h4>Infowindow 2</h4>
+        @if (selectedMarker != null)
+        {
+            <p>@selectedMarker.Id</p>
+        }
+
+
+        <button onclick="@RemoveMarker">Remove marker</button>
     </div>
 </GoogleMapInfoWindow>
 
@@ -59,7 +75,6 @@ If you when add marker into map  fill property **AssociatedInfoWindowId**, after
     protected override void OnInit()
     {
         base.OnInit();
-
         markers = MarkerCollectionFactory.Create();
     }
 
@@ -69,7 +84,7 @@ If you when add marker into map  fill property **AssociatedInfoWindowId**, after
         markers.Add(new MarkerOptions(mouseEvent.LatLng)
         {
             Title = $"Test {DateTime.Now}",
-            AssociatedInfoWindowId = "infoWindow",
+            AssociatedInfoWindowId = markers.Count % 2 == 0 ? "infoWindow" : "infoWindowSecond",
             OnMarkerClick = EventCallback.Factory.Create<Marker>(this, MarkerClick)
         });
     }
@@ -83,6 +98,15 @@ If you when add marker into map  fill property **AssociatedInfoWindowId**, after
     {
         selectedMarker = marker;
         Console.WriteLine(marker.Options.Title);
+    }
+
+    async Task RemoveMarker()
+    {
+        if (selectedMarker != null)
+        {
+            var removedResult = await markers.Remove(selectedMarker);
+            Console.WriteLine($"Marker removed: {removedResult}");
+        }
     }
 }
 ```
