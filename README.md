@@ -2,18 +2,18 @@
 Blazor component for GoogleMap which allows to manipulate with GoogleMap just with C# language and no JS is required.
 
 ## IMPORTANT!
-This is very very first prewview version and API it will increase and also documentation.
+This is very very first preview version and API it will increase and also documentation.
 
 # Instalation
-[![NuGet Pre Release](https://img.shields.io/badge/nuget-0.0.1-orange.svg)](https://www.nuget.org/packages/Blazor.GoogleMap)
+[![NuGet Pre Release](https://img.shields.io/badge/nuget-0.0.1-orange.svg)](https://www.nuget.org/packages/BlazorMap)
 
 # Setup
 ```cs
 public void ConfigureServices(IServiceCollection services)
 {
-	services.AddGoogleMaps(options =>
+    services.AddGoogleMaps(options =>
     {
-		options.ApiKey = "Your Google Maps Api Key";
+	options.ApiKey = "Your Google Maps Api Key";
     });
 }
 ```
