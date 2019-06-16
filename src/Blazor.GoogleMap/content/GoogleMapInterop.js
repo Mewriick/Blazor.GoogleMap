@@ -3,14 +3,15 @@
 
 window.blazorGoogleMap = {
     markers: [],
+    infoWindowContentNodes: [],
 
     initMapCallback: function () {
         var currentThis = this === window
             ? this.blazorGoogleMap
             : this;
 
-        currentThis.map = new google.maps.Map(
-            document.getElementById('map'), currentThis.initialMapOptions);
+        currentThis.map = new google.maps.Map(document.getElementById('map'), currentThis.initialMapOptions);
+        currentThis.infoWindow = new google.maps.InfoWindow();
 
         if (currentThis.eventHandlersInvoker === undefined) {
             return false;
@@ -55,12 +56,47 @@ window.blazorGoogleMap = {
         return true;
     },
 
+    removeMarker: function (markerId) {
+        var markerPair = this.blazorGoogleMap.markers.find(function (m) {
+            return m.mapMarker.id === markerId;
+        });
+
+        if (markerPair === undefined) {
+            return false;
+        }
+
+        markerPair.mapMarker.setMap(null);
+        const filteredMarkers = this.blazorGoogleMap.markers.filter(
+            function (marker) {
+                return marker.id !== markerId;
+            }
+        );
+
+        var removeResult = filteredMarkers.length === this.blazorGoogleMap.markers.length - 1;
+        this.blazorGoogleMap.markers = filteredMarkers;
+
+        return removeResult;
+    },
+
     openInfoWindow: function (id, positionableObject, htmlContent) {
-        var content = htmlContent === undefined 
-            ? document.getElementById(id).innerHTML
-            : htmlContent;
+        var content = {};
+        if (htmlContent !== undefined) {
+            content = htmlContent;
+        } else {
+            var nodeContent = this.blazorGoogleMap.infoWindowContentNodes.find(function (n) {
+                return n.id === id;
+            });
+
+            if (nodeContent === undefined) {
+                var node = document.getElementById(id);
+                node.removeAttribute("style");
+                this.blazorGoogleMap.infoWindowContentNodes.push({ id: id, node: node });
+                content = node;
+            } else {
+                content = nodeContent.node;
+            }
+        }
         
-        this.blazorGoogleMap.infoWindow = new google.maps.InfoWindow();
         this.blazorGoogleMap.infoWindow.setContent(content);
 
         var marker = this.blazorGoogleMap.markers.find(function (m) {

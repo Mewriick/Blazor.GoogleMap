@@ -7,11 +7,27 @@
 <GoogleMap OnClick="@MapOnClick" OnDoubleClick="@MapOnDoubleClick"></GoogleMap>
 <GoogleMapInfoWindow Id="infoWindow">
     <div>
-        <h4>Test</h4>
+        <h4>Infowindow 1</h4>
         @if (selectedMarker != null)
         {
             <p>@selectedMarker.Id</p>
         }
+
+
+        <button onclick="@RemoveMarker">Remove marker</button>
+    </div>
+</GoogleMapInfoWindow>
+
+<GoogleMapInfoWindow Id="infoWindowSecond">
+    <div>
+        <h4>Infowindow 2</h4>
+        @if (selectedMarker != null)
+        {
+            <p>@selectedMarker.Id</p>
+        }
+
+
+        <button onclick="@RemoveMarker">Remove marker</button>
     </div>
 </GoogleMapInfoWindow>
 
@@ -23,13 +39,7 @@
     protected override void OnInit()
     {
         base.OnInit();
-
         markers = MarkerCollectionFactory.Create();
-    }
-
-    void IncrementCount()
-    {
-        currentCount++;
     }
 
     void MapOnClick(MouseEventArgs mouseEvent)
@@ -38,7 +48,7 @@
         markers.Add(new MarkerOptions(mouseEvent.LatLng)
         {
             Title = $"Test {DateTime.Now}",
-            AssociatedInfoWindowId = "infoWindow",
+            AssociatedInfoWindowId = markers.Count % 2 == 0 ? "infoWindow" : "infoWindowSecond",
             OnMarkerClick = EventCallback.Factory.Create<Marker>(this, MarkerClick)
         });
     }
@@ -52,5 +62,14 @@
     {
         selectedMarker = marker;
         Console.WriteLine(marker.Options.Title);
+    }
+
+    async Task RemoveMarker()
+    {
+        if (selectedMarker != null)
+        {
+            var removedResult = await markers.Remove(selectedMarker);
+            Console.WriteLine($"Marker removed: {removedResult}");
+        }
     }
 }

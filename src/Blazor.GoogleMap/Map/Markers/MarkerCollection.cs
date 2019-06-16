@@ -34,24 +34,31 @@ namespace Blazor.GoogleMap.Map.Markers
                 "blazorGoogleMap.addMarker",
                 new DotNetObjectRef(marker), markerOptions);
 
+            markers.Add(marker.Id, marker);
+
             return marker;
         }
 
-        public Task Remove(Marker marker)
+        public async Task<bool> Remove(Marker marker)
         {
-            throw new NotImplementedException();
+            var jsRemoveResult = await jSRuntime
+                .InvokeAsync<bool>("blazorGoogleMap.removeMarker", marker.Id);
+
+            if (jsRemoveResult)
+            {
+                markers.Remove(marker.Id);
+
+                return true;
+            }
+
+            return jsRemoveResult;
         }
 
         public bool Contains(Marker marker)
-        {
-            throw new NotImplementedException();
-        }
+            => markers.ContainsKey(marker.Id);
 
         public void Clear()
-        {
-            throw new NotImplementedException();
-        }
-
+            => markers.Clear();
 
         public IEnumerator<Marker> GetEnumerator()
             => markers.Values.GetEnumerator();
