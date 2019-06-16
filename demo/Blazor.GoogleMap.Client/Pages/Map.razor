@@ -49,7 +49,13 @@
         {
             Title = $"Test {DateTime.Now}",
             AssociatedInfoWindowId = markers.Count % 2 == 0 ? "infoWindow" : "infoWindowSecond",
-            OnMarkerClick = EventCallback.Factory.Create<Marker>(this, MarkerClick)
+            Animation = MarkerAnimation.Drop,
+            Draggable = true,
+            //Label = new MarkerLabel("A"),
+            //Icon = $"{GoogleMapConstants.IconBase}parking_lot_maps.png"
+            OnMarkerClick = EventCallback.Factory.Create<Marker>(this, MarkerClick),
+            OnDragEnd = EventCallback.Factory.Create<Marker>(this, MarkerDragEnd),
+            OnMarkerRightClick = EventCallback.Factory.Create<Marker>(this, MarkerRightClick),
         });
     }
 
@@ -58,10 +64,15 @@
         Console.WriteLine($"DoubleClicked! {mouseEvent.LatLng.Lat}, {mouseEvent.LatLng.Lng}");
     }
 
-    void MarkerClick(Marker marker)
+    Task MarkerClick(Marker marker)
     {
         selectedMarker = marker;
         Console.WriteLine(marker.Options.Title);
+
+        return Task.WhenAll(
+            selectedMarker.SetOpacity(0.5),
+            selectedMarker.SetIcon($"{GoogleMapConstants.IconBase}parking_lot_maps.png")
+        );
     }
 
     async Task RemoveMarker()
@@ -71,5 +82,15 @@
             var removedResult = await markers.Remove(selectedMarker);
             Console.WriteLine($"Marker removed: {removedResult}");
         }
+    }
+
+    void MarkerDragEnd(Marker marker)
+    {
+        Console.WriteLine($"MarkerDragEnd: {marker.Options.Position}");
+    }
+
+    void MarkerRightClick(Marker marker)
+    {
+        marker.OpenInfoWindow(new MarkupString("<div><h4>Simple static content</h4></div>"));
     }
 }

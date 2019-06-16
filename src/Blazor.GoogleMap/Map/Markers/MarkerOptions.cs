@@ -1,18 +1,40 @@
 ﻿using Blazor.GoogleMap.Map.Coordinates;
 using Microsoft.AspNetCore.Components;
-using System;
 
 namespace Blazor.GoogleMap.Map.Markers
 {
     public class MarkerOptions
     {
-        public Guid Id { get; }
-
-        public LatLng Position { get; }
+        public LatLng Position { get; private set; }
 
         public string Title { get; set; } = string.Empty;
 
+        public MarkerLabel Label { get; set; }
+
+        public string Icon { get; set; } = string.Empty;
+
+        public MarkerAnimation Animation { get; set; } = MarkerAnimation.None;
+
+        /// <summary>
+        /// The marker's opacity between 0.0 and 1.0.
+        /// </summary>
+        public double Opacity { get; set; } = 1.0;
+
+        public bool Visible { get; set; } = true;
+
+        public bool Draggable { get; set; }
+
+        public bool Clickable { get; set; } = true;
+
+        public string Cursor { get; set; }
+
         public EventCallback<Marker> OnMarkerClick { get; set; }
+
+        public EventCallback<Marker> OnMarkerDblClick { get; set; }
+
+        public EventCallback<Marker> OnMarkerRightClick { get; set; }
+
+        public EventCallback<Marker> OnDragEnd { get; set; }
 
         /// <summary>
         /// Id of <see cref="InfoWindows.InfoWindow"/> component. If this property is not empty after <see cref="OnMarkerClick"/> <see cref="InfoWindows.InfoWindow"/> is opened
@@ -21,7 +43,11 @@ namespace Blazor.GoogleMap.Map.Markers
 
         public MarkerOptions(LatLng position)
         {
-            Id = Guid.NewGuid();
+            Position = position;
+        }
+
+        internal void SetPosition(LatLng position)
+        {
             Position = position;
         }
     }

@@ -30,9 +30,9 @@ namespace Blazor.GoogleMap.Map.Markers
         {
             var marker = new Marker(markerOptions, jSRuntime, infoWindow);
 
-            await jSRuntime.InvokeAsync<object>(
-                "blazorGoogleMap.addMarker",
-                new DotNetObjectRef(marker), markerOptions);
+            await jSRuntime.InvokeAsync<bool>(
+                "blazorGoogleMap.markersModule.addMarker",
+                new DotNetObjectRef(marker), markerOptions, marker.Id);
 
             markers.Add(marker.Id, marker);
 
@@ -42,7 +42,7 @@ namespace Blazor.GoogleMap.Map.Markers
         public async Task<bool> Remove(Marker marker)
         {
             var jsRemoveResult = await jSRuntime
-                .InvokeAsync<bool>("blazorGoogleMap.removeMarker", marker.Id);
+                .InvokeAsync<bool>("blazorGoogleMap.markersModule.removeMarker", marker.Id);
 
             if (jsRemoveResult)
             {

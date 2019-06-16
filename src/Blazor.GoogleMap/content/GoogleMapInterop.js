@@ -2,7 +2,6 @@
 // wrapped in a .NET API
 
 window.blazorGoogleMap = {
-    markers: [],
     infoWindowContentNodes: [],
 
     initMapCallback: function () {
@@ -37,47 +36,6 @@ window.blazorGoogleMap = {
         this.blazorGoogleMap.initialMapOptions = initialMapOptions;
     },
 
-    addMarker: function (markerRef, marker) {
-        var mapMarker = new google.maps.Marker({
-            map: this.blazorGoogleMap.map,
-            position: marker.position,
-            title: marker.title
-        });
-
-        if (marker.onClick !== null) {
-            mapMarker.addListener('click', function () {
-                return markerRef.invokeMethodAsync('OnClickHandle');
-            });
-        }
-
-        mapMarker.id = marker.id;
-        this.blazorGoogleMap.markers.push({ mapMarker: mapMarker, markerRef: markerRef });
-
-        return true;
-    },
-
-    removeMarker: function (markerId) {
-        var markerPair = this.blazorGoogleMap.markers.find(function (m) {
-            return m.mapMarker.id === markerId;
-        });
-
-        if (markerPair === undefined) {
-            return false;
-        }
-
-        markerPair.mapMarker.setMap(null);
-        const filteredMarkers = this.blazorGoogleMap.markers.filter(
-            function (marker) {
-                return marker.id !== markerId;
-            }
-        );
-
-        var removeResult = filteredMarkers.length === this.blazorGoogleMap.markers.length - 1;
-        this.blazorGoogleMap.markers = filteredMarkers;
-
-        return removeResult;
-    },
-
     openInfoWindow: function (id, positionableObject, htmlContent) {
         var content = {};
         if (htmlContent !== undefined) {
@@ -99,12 +57,9 @@ window.blazorGoogleMap = {
         
         this.blazorGoogleMap.infoWindow.setContent(content);
 
-        var marker = this.blazorGoogleMap.markers.find(function (m) {
-            return m.mapMarker.id === positionableObject.id;
-        });
-
+        var marker = this.blazorGoogleMap.markersModule.findMarker(positionableObject.id);
         if (marker !== undefined) {
-            this.blazorGoogleMap.infoWindow.open(this.blazorGoogleMap.map, marker.mapMarker);
+            this.blazorGoogleMap.infoWindow.open(this.blazorGoogleMap.map, marker);
         } else {
             this.blazorGoogleMap.infoWindow.setPosition(positionableObject.position);
             this.blazorGoogleMap.infoWindow.open(this.blazorGoogleMap.map);
