@@ -4,7 +4,7 @@ Blazor(Server) component for Google Map which allows to mapping features just wi
 Blazor Web Assembly is still in preview for ASP.NET Core 3.0 and its' API(s) are still changing a lot. So Blazor.GoogleMap.Client project is removed for now.
 
 ## IMPORTANT!
-This is just a preview version of the component but ready to use in PROD at your own risj. 
+This is just a preview version of the component but ready to use in PROD at your own risk. 
 In future new features will be added. Feel free to send PR(s).
 
 # Instalation
@@ -23,7 +23,7 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-Also don't forget to add following .js files into _Host.cshtml file as below
+Also don't forget to add following GoogleMapInterop.js and GoogleMapMarkerInterop.js files into _Host.cshtml file as below
 
 ```html
     <script src="_framework/blazor.server.js"></script>
