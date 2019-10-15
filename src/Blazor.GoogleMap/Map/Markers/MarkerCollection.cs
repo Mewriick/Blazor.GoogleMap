@@ -32,7 +32,7 @@ namespace Blazor.GoogleMap.Map.Markers
 
             await jSRuntime.InvokeAsync<bool>(
                 "blazorGoogleMap.markersModule.addMarker",
-                new DotNetObjectRef(marker), markerOptions, marker.Id);
+                DotNetObjectReference.Create<Marker>(marker), markerOptions, marker.Id);
 
             markers.Add(marker.Id, marker);
 

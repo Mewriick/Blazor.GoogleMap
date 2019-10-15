@@ -83,21 +83,21 @@ namespace Blazor.GoogleMap.Map.Markers
                 "blazorGoogleMap.markersModule.setAnimation", Id, markerAnimation);
         }
 
-        public Task SetIcon(string iconUrl)
+        public async Task<bool> SetIcon(string iconUrl)
         {
             Options.Icon = iconUrl;
-            return jSRuntime.InvokeAsync<bool>(
+            return await jSRuntime.InvokeAsync<bool>(
                 "blazorGoogleMap.markersModule.setIcon", Id, iconUrl);
         }
 
-        public Task SetOpacity(double opacity)
+        public async Task<ValueTask<bool>> SetOpacity(double opacity)
         {
             Options.Opacity = opacity;
             return jSRuntime.InvokeAsync<bool>(
                 "blazorGoogleMap.markersModule.setOpacity", Id, opacity);
         }
 
-        public Task SetVisibility(bool visible)
+        public async Task<ValueTask<bool>> SetVisibility(bool visible)
         {
             Options.Visible = visible;
             return jSRuntime.InvokeAsync<bool>(

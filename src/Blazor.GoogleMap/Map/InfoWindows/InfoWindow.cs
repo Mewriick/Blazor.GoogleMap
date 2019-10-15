@@ -11,15 +11,15 @@ namespace Blazor.GoogleMap.Map.InfoWindows
         {
         }
 
-        public Task Open(string infoWindowId, ILocationable locationable = null)
+        public async Task<object> Open(string infoWindowId, ILocationable locationable = null)
         {
-            return jSRuntime.InvokeAsync<object>(
+            return await jSRuntime.InvokeAsync<object>(
                 "blazorGoogleMap.openInfoWindow", infoWindowId, locationable);
         }
 
-        public Task Open(MarkupString htmlContent, ILocationable locationable)
+        public async Task<object> Open(MarkupString htmlContent, ILocationable locationable)
         {
-            return jSRuntime.InvokeAsync<object>(
+            return await jSRuntime.InvokeAsync<object>(
                 "blazorGoogleMap.openInfoWindow", string.Empty, locationable, htmlContent.ToString());
         }
     }

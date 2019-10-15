@@ -1,21 +1,35 @@
 # Blazor.GoogleMap
-Blazor component for GoogleMap which allows to manipulate with GoogleMap just with C# language and no JS is required.
+Blazor(Server) component for Google Map which allows to mapping features just with C# language and ASP.NET Core 3.0
+
+Blazor Web Assembly is still in preview for ASP.NET Core 3.0 and its' API(s) are still changing a lot. So Blazor.GoogleMap.Client project is removed for now.
 
 ## IMPORTANT!
-This is very very first preview version and API it will increase and also documentation.
+This is just a preview version of the component but ready to use in PROD at your own risj. 
+In future new features will be added. Feel free to send PR(s).
 
 # Instalation
-[![NuGet Pre Release](https://img.shields.io/badge/nuget-0.0.2--preview-orange.svg)](https://www.nuget.org/packages/BlazorMap)
+Soon
 
 # Setup
+Just add ``AddGoogleMaps`` service extension to default service collection of the application. Also don't forget to check other options.
+
 ```cs
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddGoogleMaps(options =>
     {
-	options.ApiKey = "Your Google Maps Api Key";
+		options.ApiKey = "Your Google Maps Api Key";
     });
 }
+```
+
+Also don't forget to add following .js files into _Host.cshtml file as below
+
+```html
+    <script src="_framework/blazor.server.js"></script>
+
+    <script src="~/GoogleMapInterop.js"></script>
+    <script src="~/GoogleMapMarkerInterop.js"></script>
 ```
 
 # Features
@@ -37,10 +51,11 @@ If you add marker into map whit filled property **AssociatedInfoWindowId**, afte
 @page "/map"
 @inject MarkerCollectionFactory MarkerCollectionFactory;
 @inject InfoWindow  InfoWindow;
+@inject IJSRuntime JsRuntime;
 
 <h1>Google Map</h1>
 
-<GoogleMap OnClick="@MapOnClick" OnDoubleClick="@MapOnDoubleClick"></GoogleMap>
+<GoogleMap OnClick="(args)=>MapOnClick(args)" OnDoubleClick="(args)=>MapOnDoubleClick(args)"></GoogleMap>
 <GoogleMapInfoWindow Id="infoWindow">
     <div>
         <h4>Infowindow 1</h4>
@@ -50,7 +65,7 @@ If you add marker into map whit filled property **AssociatedInfoWindowId**, afte
         }
 
 
-        <button onclick="@RemoveMarker">Remove marker</button>
+        <button @onclick="()=>RemoveMarker()">Remove marker</button>
     </div>
 </GoogleMapInfoWindow>
 
@@ -63,7 +78,7 @@ If you add marker into map whit filled property **AssociatedInfoWindowId**, afte
         }
 
 
-        <button onclick="@RemoveMarker">Remove marker</button>
+         <button @onclick="()=>RemoveMarker()">Remove marker</button>
     </div>
 </GoogleMapInfoWindow>
 
@@ -72,9 +87,9 @@ If you add marker into map whit filled property **AssociatedInfoWindowId**, afte
     IMarkerCollection markers;
     Marker selectedMarker;
 
-    protected override void OnInit()
+    protected async override Task OnInitializedAsync()
     {
-        base.OnInit();
+        await base.OnInitializedAsync();
         markers = MarkerCollectionFactory.Create();
     }
 

@@ -20,11 +20,11 @@ namespace Blazor.GoogleMap
             configure.Invoke(googleMapOptions);
 
             services.AddSingleton(googleMapOptions);
-            services.AddSingleton<GoogleMapInterop>();
-            services.AddSingleton<InfoWindow>();
-            services.AddSingleton<IMouseEventsInovkable, MouseEventsInvoker>();
-            services.AddSingleton<MarkerCollectionFactory>();
-            services.AddSingleton<IRendereringStatusCache, MemoryRenderingCache>();
+            services.AddScoped<GoogleMapInterop>();
+            services.AddScoped<InfoWindow>();
+            services.AddScoped<IMouseEventsInovkable, MouseEventsInvoker>();
+            services.AddScoped<MarkerCollectionFactory>();
+            services.AddScoped<IRendereringStatusCache, MemoryRenderingCache>();
 
             return services;
         }

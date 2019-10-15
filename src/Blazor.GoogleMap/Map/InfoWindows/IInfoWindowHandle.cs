@@ -5,8 +5,8 @@ namespace Blazor.GoogleMap.Map.InfoWindows
 {
     public interface IInfoWindowHandle
     {
-        Task Open(string infoWindowId, ILocationable locationable);
+        Task<object> Open(string infoWindowId, ILocationable locationable);
 
-        Task Open(MarkupString htmlContent, ILocationable locationable);
+        Task<object> Open(MarkupString htmlContent, ILocationable locationable);
     }
 }

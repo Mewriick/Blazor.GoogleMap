@@ -19,7 +19,7 @@ namespace Blazor.GoogleMap.Components.Rendering
 
         IRendererTreeBuilder AddAttribute(string name, Func<MulticastDelegate> value);
 
-        IRendererTreeBuilder AddAttribute(string name, Action<UIEventArgs> value);
+        IRendererTreeBuilder AddAttribute(string name, Action<EventArgs> value);
 
         IRendererTreeBuilder AddContent(string textContent);
 

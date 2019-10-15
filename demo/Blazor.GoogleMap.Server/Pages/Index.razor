@@ -1,10 +1,15 @@
-﻿@page "/map"
+﻿@page "/"
+
+<h1>Hello, world!</h1>
+
 @inject MarkerCollectionFactory MarkerCollectionFactory;
-@inject InfoWindow  InfoWindow;
+@inject InfoWindow InfoWindow
+@inject IJSRuntime JsRuntime;
 
-<h1>Google Map</h1>
+<h3>This is a Google Map component demo for a Blazor App.</h3>
 
-<GoogleMap OnClick="@MapOnClick" OnDoubleClick="@MapOnDoubleClick"></GoogleMap>
+<GoogleMap OnClick="(args)=>MapOnClick(args)" OnDoubleClick="(args)=>MapOnDoubleClick(args)"></GoogleMap>
+
 <GoogleMapInfoWindow Id="infoWindow">
     <div>
         <h4>Infowindow 1</h4>
@@ -13,8 +18,8 @@
             <p>@selectedMarker.Id</p>
         }
 
+        <button @onclick="()=>RemoveMarker()">Remove marker</button>
 
-        <button onclick="@RemoveMarker">Remove marker</button>
     </div>
 </GoogleMapInfoWindow>
 
@@ -26,8 +31,8 @@
             <p>@selectedMarker.Id</p>
         }
 
+        <button @onclick="()=>RemoveMarker()">Remove marker</button>
 
-        <button onclick="@RemoveMarker">Remove marker</button>
     </div>
 </GoogleMapInfoWindow>
 
@@ -36,43 +41,33 @@
     IMarkerCollection markers;
     Marker selectedMarker;
 
-    protected override void OnInit()
+
+    protected async override Task OnInitializedAsync()
     {
-        base.OnInit();
+        await base.OnInitializedAsync();
         markers = MarkerCollectionFactory.Create();
     }
 
-    void MapOnClick(MouseEventArgs mouseEvent)
+    void MapOnClick(Blazor.GoogleMap.Map.Events.MouseEventArgs mouseEvent)
     {
         Console.WriteLine($"Clicked! {mouseEvent.LatLng.Lat}, {mouseEvent.LatLng.Lng}");
         markers.Add(new MarkerOptions(mouseEvent.LatLng)
         {
             Title = $"Test {DateTime.Now}",
             AssociatedInfoWindowId = markers.Count % 2 == 0 ? "infoWindow" : "infoWindowSecond",
-            Animation = MarkerAnimation.Drop,
-            Draggable = true,
-            //Label = new MarkerLabel("A"),
-            //Icon = $"{GoogleMapConstants.IconBase}parking_lot_maps.png"
-            OnMarkerClick = EventCallback.Factory.Create<Marker>(this, MarkerClick),
-            OnDragEnd = EventCallback.Factory.Create<Marker>(this, MarkerDragEnd),
-            OnMarkerRightClick = EventCallback.Factory.Create<Marker>(this, MarkerRightClick),
+            OnMarkerClick = EventCallback.Factory.Create<Marker>(this, MarkerClick)
         });
     }
 
-    void MapOnDoubleClick(MouseEventArgs mouseEvent)
+    void MapOnDoubleClick(Blazor.GoogleMap.Map.Events.MouseEventArgs mouseEvent)
     {
         Console.WriteLine($"DoubleClicked! {mouseEvent.LatLng.Lat}, {mouseEvent.LatLng.Lng}");
     }
 
-    Task MarkerClick(Marker marker)
+    void MarkerClick(Marker marker)
     {
         selectedMarker = marker;
         Console.WriteLine(marker.Options.Title);
-
-        return Task.WhenAll(
-            selectedMarker.SetOpacity(0.5),
-            selectedMarker.SetIcon($"{GoogleMapConstants.IconBase}parking_lot_maps.png")
-        );
     }
 
     async Task RemoveMarker()
@@ -82,15 +77,5 @@
             var removedResult = await markers.Remove(selectedMarker);
             Console.WriteLine($"Marker removed: {removedResult}");
         }
-    }
-
-    void MarkerDragEnd(Marker marker)
-    {
-        Console.WriteLine($"MarkerDragEnd: {marker.Options.Position}");
-    }
-
-    void MarkerRightClick(Marker marker)
-    {
-        marker.OpenInfoWindow(new MarkupString("<div><h4>Simple static content</h4></div>"));
     }
 }

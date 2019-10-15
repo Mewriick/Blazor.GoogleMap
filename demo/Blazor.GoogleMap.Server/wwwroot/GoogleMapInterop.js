@@ -8,6 +8,7 @@ window.blazorGoogleMap = {
         var currentThis = this === window
             ? this.blazorGoogleMap
             : this;
+
         currentThis.map = new google.maps.Map(document.getElementById('map'), currentThis.initialMapOptions);
         currentThis.infoWindow = new google.maps.InfoWindow();
 
@@ -53,7 +54,7 @@ window.blazorGoogleMap = {
                 content = nodeContent.node;
             }
         }
-
+        
         blazorGoogleMap.infoWindow.setContent(content);
 
         var marker = blazorGoogleMap.markersModule.findMarker(positionableObject.id);
@@ -66,7 +67,7 @@ window.blazorGoogleMap = {
     },
     registerEventInvokers: function (eventHandlersInvoker, initDotnetCallback) {
         if (blazorGoogleMap) {
-
+          
             blazorGoogleMap.eventHandlersInvoker = eventHandlersInvoker;
             blazorGoogleMap.initDotnetCallback = initDotnetCallback;
         }

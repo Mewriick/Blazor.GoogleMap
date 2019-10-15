@@ -2,7 +2,9 @@
 using Blazor.GoogleMap.Map;
 using Blazor.GoogleMap.Map.Events;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.RenderTree;
+using System;
 using System.Threading.Tasks;
 
 namespace Blazor.GoogleMap.Components
@@ -18,15 +20,15 @@ namespace Blazor.GoogleMap.Components
 
         [Inject] IMouseEventsInovkable MouseEventsInovkable { get; set; }
 
-        [Parameter] string Id { get; set; } = "map";
+        [Parameter] public string Id { get; set; } = "map";
 
-        [Parameter] string CssClasses { get; set; } = "map";
+        [Parameter] public string CssClasses { get; set; } = "map";
 
-        [Parameter] InitialMapOptions InitialMapOptions { get; set; } = new InitialMapOptions();
+        [Parameter] public InitialMapOptions InitialMapOptions { get; set; } = new InitialMapOptions();
 
-        [Parameter] EventCallback<MouseEventArgs> OnClick { get; set; }
+        [Parameter] public EventCallback<MouseEventArgs> OnClick { get; set; }
 
-        [Parameter] EventCallback<MouseEventArgs> OnDoubleClick { get; set; }
+        [Parameter] public EventCallback<MouseEventArgs> OnDoubleClick { get; set; }
 
         public GoogleMap()
         {
@@ -37,45 +39,48 @@ namespace Blazor.GoogleMap.Components
             base.BuildRenderTree(builder);
             var internalBuilder = new BlazorRendererTreeBuilder(builder);
 
+            if(string.IsNullOrEmpty(GoogleMapOptions.Width) || string.IsNullOrEmpty(GoogleMapOptions.Height))
+            {
+                throw new ArgumentNullException("Map width and height must have some values.");
+            }
+
             internalBuilder
                 .OpenElement("div")
+                .AddAttribute("style", $"width: {GoogleMapOptions.Width}; height: {GoogleMapOptions.Height}")
                 .AddAttribute("id", Id)
                 .AddAttribute("class", CssClasses)
                 .OpenElement("script")
                 .AddAttribute("async", "")
                 .AddAttribute("defer", "")
-                .AddAttribute("src", GoogleMapOptions.MapJsWasIncluded
-                    ? string.Empty
-                    : $"https://maps.googleapis.com/maps/api/js?key={GoogleMapOptions.ApiKey}&callback=blazorGoogleMap.initMapCallback")
+                .AddAttribute("src", !string.IsNullOrEmpty(GoogleMapOptions.ApiKey)
+                    ? $"https://maps.googleapis.com/maps/api/js?key={GoogleMapOptions.ApiKey}&callback=blazorGoogleMap.initMapCallback"
+                    : string.Empty
+                    )
                 .CloseElement()
                 .CloseElement();
         }
 
-        protected override async Task OnInitAsync()
+        protected async override Task OnAfterRenderAsync(bool firstRender)
         {
+
             MouseEventsInovkable
-                .RegisterCallback(MouseEvent.Click, OnClick)
-                .RegisterCallback(MouseEvent.DblClick, OnDoubleClick);
+             .RegisterCallback(MouseEvent.Click, OnClick)
+             .RegisterCallback(MouseEvent.DblClick, OnDoubleClick);
 
-            await GoogleMapInterop.RegisterCallbacks(new Map.InitMapCallback(MapInitialized));
+            await GoogleMapInterop.RegisterCallbacks(new InitMapCallback(MapInitialized));
             await GoogleMapInterop.InitMap(InitialMapOptions);
-        }
 
 
-        protected override Task OnAfterRenderAsync()
-        {
-            if (GoogleMapOptions.MapJsWasIncluded && !mapWasInitialized)
+            if (!mapWasInitialized && firstRender)
             {
-                return GoogleMapInterop.ExecuteInitMapCallback();
+                await GoogleMapInterop.ExecuteInitMapCallback();
+                mapWasInitialized = true;
             }
-
-            return Task.CompletedTask;
         }
 
         private void MapInitialized()
         {
-            GoogleMapOptions.MapJsWasIncluded = true;
-            mapWasInitialized = true;
+            //TODO: Do some extra operations if needed when map is initialized          
         }
     }
 }
