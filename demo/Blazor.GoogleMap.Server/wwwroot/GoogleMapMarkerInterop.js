@@ -68,7 +68,7 @@ window.blazorGoogleMap.markersModule = {
     },
 
     setAnimation: function (markerId, animation) {
-        var marker = blazorGoogleMap.markersModule.findMarker(markerId);
+        var marker =blazorGoogleMap.markersModule.findMarker(markerId);
         if (marker !== undefined) {
             marker.setAnimation(animation);
         }

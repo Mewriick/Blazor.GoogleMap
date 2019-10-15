@@ -18,27 +18,29 @@ namespace Blazor.GoogleMap
             this.mouseEventsInovkable = mouseEventsInovkable ?? throw new ArgumentNullException(nameof(mouseEventsInovkable));
         }
 
-        public Task<bool> InitMap(InitialMapOptions initialMapOptions)
+        public async Task InitMap(InitialMapOptions initialMapOptions)
         {
-            return jSRuntime.InvokeAsync<bool>("blazorGoogleMap.initMap", initialMapOptions);
+            
+           await jSRuntime.InvokeVoidAsync("blazorGoogleMap.initMap", initialMapOptions);
         }
 
-        public Task<bool> ExecuteInitMapCallback()
+        public async Task ExecuteInitMapCallback()
         {
-            return jSRuntime.InvokeAsync<bool>("blazorGoogleMap.initMapCallback");
+             await jSRuntime.InvokeAsync<bool>("blazorGoogleMap.initMapCallback");
         }
 
-        public Task RegisterCallbacks(InitMapCallback initMapCallback)
+        public async Task RegisterCallbacks(InitMapCallback initMapCallback)
         {
-            return jSRuntime.InvokeAsync<object>(
-                "blazorGoogleMap.registerEventInvokers",
-                new DotNetObjectRef(mouseEventsInovkable), new DotNetObjectRef(initMapCallback));
+            var mouseEvents = DotNetObjectReference.Create<IMouseEventsInovkable>(mouseEventsInovkable);
+            var mapCallBack = DotNetObjectReference.Create<InitMapCallback>(initMapCallback);
+            
+            await jSRuntime.InvokeAsync<object>("blazorGoogleMap.registerEventInvokers", mouseEvents,mapCallBack );
+           
         }
 
-        public Task CreateInfoWindow(string id, LatLng position)
+        public async Task<object> CreateInfoWindow(string id, LatLng position)
         {
-            return jSRuntime.InvokeAsync<object>(
-                "blazorGoogleMap.createInfoWindow", id, position);
+            return await jSRuntime.InvokeAsync<object>("blazorGoogleMap.createInfoWindow", id, position);
         }
     }
 }

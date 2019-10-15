@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.RenderTree;
+using Microsoft.AspNetCore.Components.Rendering;
 using System;
 
 namespace Blazor.GoogleMap.Components.Rendering
@@ -42,7 +42,7 @@ namespace Blazor.GoogleMap.Components.Rendering
             return this;
         }
 
-        public IRendererTreeBuilder AddAttribute(string name, Action<UIEventArgs> value)
+        public IRendererTreeBuilder AddAttribute(string name, Action<EventArgs> value)
         {
             renderTreeBuilder.AddAttribute(++sequence, name, value);
 

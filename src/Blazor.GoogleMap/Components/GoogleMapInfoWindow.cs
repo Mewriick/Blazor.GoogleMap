@@ -1,5 +1,6 @@
 ﻿using Blazor.GoogleMap.Components.Rendering;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.RenderTree;
 using System;
 
@@ -8,9 +9,9 @@ namespace Blazor.GoogleMap.Components
     [Route("/googlemapinfowindow")]
     public class GoogleMapInfoWindow : ComponentBase
     {
-        [Parameter] RenderFragment ChildContent { get; set; }
+        [Parameter] public RenderFragment ChildContent { get; set; }
 
-        [Parameter] string Id { get; set; }
+        [Parameter] public string Id { get; set; }
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
