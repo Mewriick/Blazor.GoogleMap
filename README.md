@@ -36,7 +36,18 @@ Also don't forget to add following .js files into _Host.cshtml file as below
 * Add marker to the map
 * Add OnClick, OnDoubleClick event listeners on the map and marker
 * InfoWindow
+* Google Map initialization options added to **InitialMapOptions**
 
+```
+    FullscreenControl = true,
+    MapTypeControl = false,
+    MapTypeId = MapTypes.Roadmap,
+    RotateControl = false,
+    ScaleControl = false,
+    Scrollwheel = true,
+    StreetViewControl = false,
+    ZoomControl = false
+```
 # Markers
 For adding markers to the map you need **IMarkerCollection** service which is provided by method **Create** on **MarkerCollectionFactory** object.
 
@@ -55,7 +66,7 @@ If you add marker into map whit filled property **AssociatedInfoWindowId**, afte
 
 <h1>Google Map</h1>
 
-<GoogleMap OnClick="(args)=>MapOnClick(args)" OnDoubleClick="(args)=>MapOnDoubleClick(args)"></GoogleMap>
+<GoogleMap OnClick="(args)=>MapOnClick(args)" OnDoubleClick="(args)=>MapOnDoubleClick(args)" InitialMapOptions="@initialMapOptions"></GoogleMap>
 <GoogleMapInfoWindow Id="infoWindow">
     <div>
         <h4>Infowindow 1</h4>
@@ -86,11 +97,33 @@ If you add marker into map whit filled property **AssociatedInfoWindowId**, afte
     int currentCount = 0;
     IMarkerCollection markers;
     Marker selectedMarker;
-
-    protected async override Task OnInitializedAsync()
+	InitialMapOptions initialMapOptions;
+    
+	protected async override Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         markers = MarkerCollectionFactory.Create();
+		
+		initialMapOptions = new InitialMapOptions
+        {
+            Center = new Blazor.GoogleMap.Map.Coordinates.LatLng
+            {
+                Lat = 41.058002,
+                Lng = 29.0416793
+            },
+            Zoom = 5,
+            Height = "400px",
+            Width = "100%",
+            FullscreenControl = true,
+            MapTypeControl = false,
+            MapTypeId = MapTypes.Roadmap,
+            RotateControl = false,
+            ScaleControl = false,
+            Scrollwheel = true,
+            StreetViewControl = false,
+            ZoomControl = false
+        };
+
     }
 
     void MapOnClick(MouseEventArgs mouseEvent)

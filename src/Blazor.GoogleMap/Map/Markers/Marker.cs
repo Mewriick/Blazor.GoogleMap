@@ -90,17 +90,18 @@ namespace Blazor.GoogleMap.Map.Markers
                 "blazorGoogleMap.markersModule.setIcon", Id, iconUrl);
         }
 
-        public async Task<ValueTask<bool>> SetOpacity(double opacity)
+        public async Task<bool> SetOpacity(double opacity)
         {
             Options.Opacity = opacity;
-            return jSRuntime.InvokeAsync<bool>(
-                "blazorGoogleMap.markersModule.setOpacity", Id, opacity);
+            return await jSRuntime.InvokeAsync<bool>(
+                 "blazorGoogleMap.markersModule.setOpacity", Id, opacity);
+
         }
 
-        public async Task<ValueTask<bool>> SetVisibility(bool visible)
+        public async Task<bool> SetVisibility(bool visible)
         {
             Options.Visible = visible;
-            return jSRuntime.InvokeAsync<bool>(
+            return await jSRuntime.InvokeAsync<bool>(
                 "blazorGoogleMap.markersModule.setVisibility", Id, visible);
         }
 

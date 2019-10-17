@@ -8,7 +8,7 @@
 
 <h3>This is a Google Map component demo for a Blazor App.</h3>
 
-<GoogleMap OnClick="(args)=>MapOnClick(args)" OnDoubleClick="(args)=>MapOnDoubleClick(args)"></GoogleMap>
+<GoogleMap OnClick="(args)=>MapOnClick(args)" OnDoubleClick="(args)=>MapOnDoubleClick(args)" InitialMapOptions="@initialMapOptions"></GoogleMap>
 
 <GoogleMapInfoWindow Id="infoWindow">
     <div>
@@ -40,12 +40,33 @@
     int currentCount = 0;
     IMarkerCollection markers;
     Marker selectedMarker;
+    InitialMapOptions initialMapOptions;
 
 
     protected async override Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         markers = MarkerCollectionFactory.Create();
+
+        initialMapOptions = new InitialMapOptions
+        {
+            Center = new Blazor.GoogleMap.Map.Coordinates.LatLng
+            {
+                Lat = 41.058002,
+                Lng = 29.0416793
+            },
+            Zoom = 5,
+            Height = "400px",
+            Width = "100%",
+            FullscreenControl = true,
+            MapTypeControl = false,
+            MapTypeId = MapTypes.Roadmap,
+            RotateControl = false,
+            ScaleControl = false,
+            Scrollwheel = true,
+            StreetViewControl = false,
+            ZoomControl = false
+        };
     }
 
     void MapOnClick(Blazor.GoogleMap.Map.Events.MouseEventArgs mouseEvent)
