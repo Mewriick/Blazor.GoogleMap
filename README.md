@@ -1,3 +1,6 @@
+
+<img src="https://github.com/ardacetinkaya/Blazor.GoogleMap/blob/master/src/Blazor.GoogleMap/googlemap.blazor.png" width="200" height="200">
+
 # Blazor.GoogleMap
 Blazor(Server) component for Google Map which allows to mapping features just with C# language and ASP.NET Core 3.0
 
