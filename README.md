@@ -18,7 +18,7 @@ public void ConfigureServices(IServiceCollection services)
 {
     services.AddGoogleMaps(options =>
     {
-		options.ApiKey = "Your Google Maps Api Key";
+	options.ApiKey = "Your Google Maps Api Key";
     });
 }
 ```
@@ -66,7 +66,11 @@ If you add marker into map whit filled property **AssociatedInfoWindowId**, afte
 
 <h1>Google Map</h1>
 
-<GoogleMap OnClick="(args)=>MapOnClick(args)" OnDoubleClick="(args)=>MapOnDoubleClick(args)" InitialMapOptions="@initialMapOptions"></GoogleMap>
+<GoogleMap OnClick="(args)=>MapOnClick(args)" 
+	   OnDoubleClick="(args)=>MapOnDoubleClick(args)" 
+	   InitialMapOptions="@initialMapOptions">
+</GoogleMap>
+
 <GoogleMapInfoWindow Id="infoWindow">
     <div>
         <h4>Infowindow 1</h4>
