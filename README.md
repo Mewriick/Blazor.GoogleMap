@@ -97,14 +97,14 @@ If you add marker into map whit filled property **AssociatedInfoWindowId**, afte
     int currentCount = 0;
     IMarkerCollection markers;
     Marker selectedMarker;
-	InitialMapOptions initialMapOptions;
+    InitialMapOptions initialMapOptions;
     
-	protected async override Task OnInitializedAsync()
+    protected async override Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         markers = MarkerCollectionFactory.Create();
 		
-		initialMapOptions = new InitialMapOptions
+	initialMapOptions = new InitialMapOptions
         {
             Center = new Blazor.GoogleMap.Map.Coordinates.LatLng
             {
