@@ -39,14 +39,10 @@ namespace Blazor.GoogleMap.Components
             base.BuildRenderTree(builder);
             var internalBuilder = new BlazorRendererTreeBuilder(builder);
 
-            if(string.IsNullOrEmpty(GoogleMapOptions.Width) || string.IsNullOrEmpty(GoogleMapOptions.Height))
-            {
-                throw new ArgumentNullException("Map width and height must have some values.");
-            }
 
             internalBuilder
                 .OpenElement("div")
-                .AddAttribute("style", $"width: {GoogleMapOptions.Width}; height: {GoogleMapOptions.Height}")
+                .AddAttribute("style", $"width: {InitialMapOptions.Width}; height: {InitialMapOptions.Height}")
                 .AddAttribute("id", Id)
                 .AddAttribute("class", CssClasses)
                 .OpenElement("script")

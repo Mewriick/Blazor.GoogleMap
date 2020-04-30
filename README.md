@@ -1,3 +1,7 @@
+
+<img align="right" src="https://github.com/ardacetinkaya/Blazor.GoogleMap/blob/master/src/Blazor.GoogleMap/googlemap.blazor.png" width="200" height="200">
+
+
 # Blazor.GoogleMap
 Blazor(Server) component for Google Map which allows to mapping features just with C# language and ASP.NET Core 3.0
 
@@ -18,7 +22,7 @@ public void ConfigureServices(IServiceCollection services)
 {
     services.AddGoogleMaps(options =>
     {
-		options.ApiKey = "Your Google Maps Api Key";
+	options.ApiKey = "Your Google Maps Api Key";
     });
 }
 ```
@@ -36,7 +40,18 @@ Also don't forget to add following GoogleMapInterop.js and GoogleMapMarkerIntero
 * Add marker to the map
 * Add OnClick, OnDoubleClick event listeners on the map and marker
 * InfoWindow
+* Google Map initialization options added to **InitialMapOptions**
 
+```
+    FullscreenControl = true,
+    MapTypeControl = false,
+    MapTypeId = MapTypes.Roadmap,
+    RotateControl = false,
+    ScaleControl = false,
+    Scrollwheel = true,
+    StreetViewControl = false,
+    ZoomControl = false
+```
 # Markers
 For adding markers to the map you need **IMarkerCollection** service which is provided by method **Create** on **MarkerCollectionFactory** object.
 
@@ -55,7 +70,11 @@ If you add marker into map whit filled property **AssociatedInfoWindowId**, afte
 
 <h1>Google Map</h1>
 
-<GoogleMap OnClick="(args)=>MapOnClick(args)" OnDoubleClick="(args)=>MapOnDoubleClick(args)"></GoogleMap>
+<GoogleMap OnClick="(args)=>MapOnClick(args)" 
+	   OnDoubleClick="(args)=>MapOnDoubleClick(args)" 
+	   InitialMapOptions="@initialMapOptions">
+</GoogleMap>
+
 <GoogleMapInfoWindow Id="infoWindow">
     <div>
         <h4>Infowindow 1</h4>
@@ -86,11 +105,33 @@ If you add marker into map whit filled property **AssociatedInfoWindowId**, afte
     int currentCount = 0;
     IMarkerCollection markers;
     Marker selectedMarker;
-
+    InitialMapOptions initialMapOptions;
+    
     protected async override Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         markers = MarkerCollectionFactory.Create();
+		
+	initialMapOptions = new InitialMapOptions
+        {
+            Center = new Blazor.GoogleMap.Map.Coordinates.LatLng
+            {
+                Lat = 41.058002,
+                Lng = 29.0416793
+            },
+            Zoom = 5,
+            Height = "400px",
+            Width = "100%",
+            FullscreenControl = true,
+            MapTypeControl = false,
+            MapTypeId = MapTypes.Roadmap,
+            RotateControl = false,
+            ScaleControl = false,
+            Scrollwheel = true,
+            StreetViewControl = false,
+            ZoomControl = false
+        };
+
     }
 
     void MapOnClick(MouseEventArgs mouseEvent)
